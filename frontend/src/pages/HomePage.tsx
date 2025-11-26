@@ -14,7 +14,7 @@ interface Closure {
 	atendimentos?: number;
 }
 
-export default function ConciliacaoCaixas() {
+export default function HomePage() {
 	const [closures, setClosures] = useState<Closure[]>([]);
 
 	const API_URL = import.meta.env.VITE_API_URL;
