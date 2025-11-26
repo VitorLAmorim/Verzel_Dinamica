@@ -12,10 +12,12 @@ function ScrollToTop() {
 }
 
 export function MainRouter() {
-	<BrowserRouter>
-		<Routes>
-			<Route path="/" element={<HomePage />} />
-		</Routes>
-		<ScrollToTop />
-	</BrowserRouter>;
+	return (
+		<BrowserRouter>
+			<Routes>
+				<Route path="/" element={<HomePage />} />
+			</Routes>
+			<ScrollToTop />
+		</BrowserRouter>
+	);
 }
