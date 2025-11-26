@@ -385,7 +385,7 @@ interface ServerErrorResponse {
 
 ## 📝 OBSERVAÇÕES IMPORTANTES
 
-1. **Filtros de Data:** Todos os filtros de data (`data_inicio`, `data_fim`, `date_inicio`, `date_fim`) aceitam formato `"YYYY-MM-DD"` e são automaticamente convertidos para o range completo do dia (00:00:00 até 23:59:59.999).
+1. **Filtros de Data:** Todos os filtros de data (`data`) aceitam formato `"YYYY-MM-DD"` e são automaticamente convertidos para o range completo do dia (00:00:00 até 23:59:59.999).
 
 2. **Paginação:** Use os parâmetros `limit` e `offset` para paginação. O response inclui informações de paginação com total de registros.
 
@@ -401,4 +401,4 @@ interface ServerErrorResponse {
 
 ---
 
-**Desenvolvido para processo trainee Verzel** 🚀
+**Desenvolvido para processo eliteDev Verzel** 🚀
