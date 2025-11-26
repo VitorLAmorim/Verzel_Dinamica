@@ -7,11 +7,11 @@ import { Deposit } from "../entities/Deposit";
 import { Reconciliation } from "../entities/Reconciliation";
 
 export class StoreController {
-  private storeRepository = AppDataSource.getRepository(Store);
-  private cashRegisterRepository = AppDataSource.getRepository(CashRegister);
-  private saleRepository = AppDataSource.getRepository(Sale);
-  private depositRepository = AppDataSource.getRepository(Deposit);
-  private reconciliationRepository = AppDataSource.getRepository(Reconciliation);
+  private storeRepository = () => AppDataSource.getRepository(Store);
+  private cashRegisterRepository = () => AppDataSource.getRepository(CashRegister);
+  private saleRepository = () => AppDataSource.getRepository(Sale);
+  private depositRepository = () => AppDataSource.getRepository(Deposit);
+  private reconciliationRepository = () => AppDataSource.getRepository(Reconciliation);
 
   // Get store closures for all stores on specific date
   async getStoreClosures(req: Request, res: Response): Promise<Response> {
@@ -23,12 +23,12 @@ export class StoreController {
       }
 
       // Get all stores
-      const stores = await this.storeRepository.find({
+      const stores = await this.storeRepository().find({
         order: { name: "ASC" }
       });
 
       // Get all reconciliations for the specified date
-      const reconciliationQueryBuilder = this.reconciliationRepository.createQueryBuilder("reconciliation")
+      const reconciliationQueryBuilder = this.reconciliationRepository().createQueryBuilder("reconciliation")
         .leftJoinAndSelect("reconciliation.analyst", "analyst")
         .leftJoin("reconciliation.store", "store")
         .addSelect(["store.id", "store.name"])
@@ -47,7 +47,7 @@ export class StoreController {
       });
 
       // Get all cash registers for the specified date
-      const cashRegisters = await this.cashRegisterRepository.find({
+      const cashRegisters = await this.cashRegisterRepository().find({
         where: { date: new Date(date as string) },
         relations: ["sales", "deposits"]
       });
@@ -75,7 +75,7 @@ export class StoreController {
           const cashRegisterIds = storeCashRegisters.map(cr => cr.id);
 
           // Sum all sales for the store
-          const salesSum = await this.saleRepository
+          const salesSum = await this.saleRepository()
             .createQueryBuilder("sale")
             .select("SUM(sale.net_sales)", "total")
             .where("sale.cash_register_id IN (:...ids)", { ids: cashRegisterIds })
@@ -84,7 +84,7 @@ export class StoreController {
           totalSales = parseFloat(salesSum?.total || "0");
 
           // Sum all deposits for the store
-          const depositsSum = await this.depositRepository
+          const depositsSum = await this.depositRepository()
             .createQueryBuilder("deposit")
             .select("SUM(deposit.amount)", "total")
             .where("deposit.cash_register_id IN (:...ids)", { ids: cashRegisterIds })

@@ -4,24 +4,25 @@ import Card from "../components/Card";
 
 interface Closure {
 	store_id: number;
-	nome_loja: string;
-	data: string;
-	total_vendas: number;
-	total_depositos: number;
-	saldo: number;
-	status_conciliacao: string;
+	store_name: string;
+	date: string;
+	total_sales: number;
+	total_deposits: number;
+	balance: number;
+	reconciliation_status: string;
 	has_register: boolean;
-	atendimentos?: number;
 }
 
 export default function HomePage() {
 	const [closures, setClosures] = useState<Closure[]>([]);
 
-	const API_URL = import.meta.env.VITE_API_URL;
+	const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3333/api';
+
+    const today = new Date().toISOString().split("T")[0];
 
 	useEffect(() => {
 		axios
-			.get(`${API_URL}/closure`)
+			.get(`${API_URL}/stores/closure?date=${today}`)
 			.then((res) => {
 				setClosures(res.data.closures);
 			})
@@ -42,7 +43,7 @@ export default function HomePage() {
 
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
 				{closures.map((c, i) => (
-					<Card key={i} loja={c.nome_loja} data={c.data} vendas={c.total_vendas.toString()} atendimentos={c.atendimentos ?? 0} depositos={c.total_depositos.toString()} saldo={c.saldo.toString()} />
+					<Card key={i} loja={c.store_name} data={c.date} vendas={c.total_sales} conciliacao={c.reconciliation_status} depositos={c.total_deposits} saldo={c.balance} />
 				))}
 			</div>
 		</div>

@@ -15,7 +15,7 @@ export const AppDataSource = new DataSource({
   username: "postgres",
   password: "postgres",
   database: "conciliacao_caixa",
-  synchronize: false, // true para development (creates tables automatically)
+  synchronize: false,
   logging: true,
   entities: [Store, CashRegister, Sale, Deposit, EvidenceRequest, Analyst, Reconciliation],
   migrations: ["src/migrations/*.ts"],

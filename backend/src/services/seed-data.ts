@@ -312,7 +312,7 @@ async function relateDepositsWithSales(sales: Sale[], deposits: Deposit[]): Prom
     // Atualizar cada depósito para apontar para esta venda
     for (const deposit of selectedDeposits) {
       await pool.query(
-        'UPDATE conciliacao.deposits SET sale_id = $1 WHERE id = $2',
+        'UPDATE deposits SET sale_id = $1 WHERE id = $2',
         [sale.id, deposit.id]
       );
     }
@@ -331,7 +331,7 @@ async function generateEvidenceRequests(reconciliations: Reconciliation[]): Prom
       const statusOptions = ['pending', 'responded', 'canceled'];
 
       await pool.query(
-        `INSERT INTO conciliacao.evidence_requests
+        `INSERT INTO evidence_requests
          (id, reconciliation_id, message, status, created_at, updated_at)
          VALUES ($1, $2, $3, $4, $5, $6)`,
         [
@@ -386,7 +386,7 @@ async function seedDatabase(): Promise<void> {
     console.log('💾 Inserindo analistas...');
     for (const analyst of analysts) {
       await pool.query(
-        'INSERT INTO conciliacao.analysts (id, name, email, password, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)',
+        'INSERT INTO analysts (id, name, email, password, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)',
         [analyst.id, analyst.name, analyst.email, 'senha123', new Date(), new Date()]
       );
     }
@@ -394,7 +394,7 @@ async function seedDatabase(): Promise<void> {
     console.log('💾 Inserindo lojas...');
     for (const store of stores) {
       await pool.query(
-        'INSERT INTO conciliacao.stores (id, name, cnpj, address, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)',
+        'INSERT INTO stores (id, name, cnpj, address, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)',
         [store.id, store.name, store.cnpj, store.address, new Date(), new Date()]
       );
     }
@@ -402,7 +402,7 @@ async function seedDatabase(): Promise<void> {
     console.log('💾 Inserindo caixas...');
     for (const cashRegister of cashRegisters) {
       await pool.query(
-        'INSERT INTO conciliacao.cash_registers (id, store_id, date, created_at, updated_at) VALUES ($1, $2, $3, $4, $5)',
+        'INSERT INTO cash_registers (id, store_id, date, created_at, updated_at) VALUES ($1, $2, $3, $4, $5)',
         [cashRegister.id, cashRegister.store_id, cashRegister.date, new Date(), new Date()]
       );
     }
@@ -410,7 +410,7 @@ async function seedDatabase(): Promise<void> {
     console.log('💾 Inserindo vendas...');
     for (const sale of sales) {
       await pool.query(
-        `INSERT INTO conciliacao.sales
+        `INSERT INTO sales
          (id, cash_register_id, sale_date, description, cash, pix, digital_wallets, credit_card, debit_card, net_sales, created_at, updated_at)
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
         [
@@ -424,7 +424,7 @@ async function seedDatabase(): Promise<void> {
     console.log('💾 Inserindo depósitos...');
     for (const deposit of deposits) {
       await pool.query(
-        'INSERT INTO conciliacao.deposits (id, cash_register_id, code, amount, deposit_date, verified, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+        'INSERT INTO deposits (id, cash_register_id, code, amount, deposit_date, verified, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
         [deposit.id, deposit.cash_register_id, deposit.code, deposit.amount, deposit.deposit_date, deposit.verified, new Date(), new Date()]
       );
     }
@@ -432,7 +432,7 @@ async function seedDatabase(): Promise<void> {
     console.log('💾 Inserindo conciliações...');
     for (const reconciliation of reconciliations) {
       await pool.query(
-        'INSERT INTO conciliacao.reconciliations (id, store_id, analyst_id, date, status, notes, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
+        'INSERT INTO reconciliations (id, store_id, analyst_id, date, status, notes, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)',
         [
           reconciliation.id, reconciliation.store_id, reconciliation.analyst_id,
           reconciliation.date, reconciliation.status, reconciliation.notes, new Date(), new Date()
