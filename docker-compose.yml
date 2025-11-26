@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  # PostgreSQL apenas
+  postgres:
+    image: postgres:15
+    container_name: conciliacao_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: conciliacao_caixa
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - conciliacao_network
+
+volumes:
+  postgres_data:
+
+networks:
+  conciliacao_network:
+    driver: bridge
