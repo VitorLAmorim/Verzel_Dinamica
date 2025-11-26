@@ -1,3 +1,9 @@
 export default function HomePage() {
-	return <div>Home Page</div>;
+	return (
+		<div>
+			<header>
+				<img src="/images/logo.png" alt="logo" />
+			</header>
+		</div>
+	);
 }
